@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Cart - Swiggy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+        color: #333;
+      }
+      
+      header {
+        background-color: #ff5b00;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+      }
+      
+      .logo {
+        font-size: 1.8rem;
+        font-weight: bold;
+      }
+      
+      nav a {
+        color: white;
+        margin-left: 1.5rem;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      
+      main {
+        max-width: 800px;
+        margin: 2rem auto;
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      
+      .title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 0.5rem;
+      }
+      
+      .cart-item {
+        padding: 1rem 0;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      
+      .cart-item h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #ff5b00;
+      }
+      
+      .cart-item p {
+        margin: 0.3rem 0;
+      }
+      
+      .cart-total {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 1.5rem;
+        text-align: right;
+      }
+      
+      button {
+        margin-top: 2rem;
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        background-color: #ff5b00;
+        color: white;
+        font-size: 1rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      
+      button:hover {
+        background-color: #e04f00;
+      }
+      
+      footer {
+        text-align: center;
+        padding: 1rem;
+        background: #f1f1f1;
+        font-size: 0.9rem;
+        color: #555;
+        margin-top: 3rem;
+      }
+      
+      footer a {
+        color: #ff5b00;
+        text-decoration: none;
+        margin-left: 0.5rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">Swiggy</div>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Offers</a>
+        <a href="#">Help</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="title">Your Cart</div>
+
+      <div class="cart-items">
+        {% for item in items %}
+          <div class="cart-item">
+            <h3>{{ item.name }}</h3>
+            <p>Quantity: {{ item.quantity }}</p>
+            <p>Price: ₹{{ item.price }}</p>
+            <p>
+              {% if item.discount %}
+                Discount: {{ item.discount }}%
+              {% endif %}
+            </p>
+            <p>Total: ₹{{ item.total }}</p>
+
+            <!-- Remove Button -->
+            <a href="{% url 'view_cart' %}?remove_item={{ item.food_id }}" class="remove-item" style="color: #dc3545; text-decoration: none; font-weight: bold;">Remove</a>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- 🏷️ PROMO CODE FORM -->
+      <form method="get" action="{% url 'view_cart' %}" style="margin: 2rem 0;">
+        <input type="text" name="promo_code" placeholder="Enter promo code" value="{{ promo_code }}" style="padding: 0.5rem; width: 60%; max-width: 300px;" />
+        <button type="submit" style="padding: 0.5rem 1rem; background-color: #ff5b00; color: white; border: none; border-radius: 5px;">Apply Promo</button>
+      </form>
+
+      <!-- Promo Code Error Message -->
+      <!-- Promo Code Error Message -->
+      {% if promo_error_message %}
+        <div style="color: red; margin-top: 1rem;">
+          <strong>Error:</strong> {{ promo_error_message }}
+        </div>
+      {% endif %}
+
+      {% if applied_promo %}
+        <div style="color: green; margin-top: 1rem;">
+          <strong>Promo Code ({{ promo_code }}) applied successfully! Discount: -{{ promo_discount }}%</strong>
+        </div>
+      {% endif %}
+
+      <div class="cart-total">
+        <p>Subtotal: ₹{{ subtotal }}</p>
+
+        {% if promo_code %}
+          <p>Promo Code ({{ promo_code }}) Applied: -{{ promo_discount }}%</p>
+        {% endif %}
+
+        <p>
+          <strong>Total After Discounts: ₹{{ total_price }}</strong>
+        </p>
+      </div>
+
+      <button onclick="checkout()"><i class="fas fa-credit-card"></i> Proceed to Checkout</button>
+    </main>
+
+    <footer>
+      <p>
+        &copy; {{ current_year }} Swiggy. All rights reserved.
+        <a href="#">Privacy Policy</a>
+      </p>
+    </footer>
+
+    <script>
+      function checkout() {
+            // Save cart data from session to localStorage (optional fallback)
+            const cartData = {{ request.session.cart|safe }};
+        
+            // Optionally store cart to localStorage for use on the next page
+            localStorage.setItem("cart", JSON.stringify(cartData));
+        
+            // Redirect to the dedicated checkout page
+            window.location.href = "{% url 'checkout_page' %}";
+        }
+  </script>
+  </body>
+</html>

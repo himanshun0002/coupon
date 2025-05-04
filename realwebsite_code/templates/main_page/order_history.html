@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Order History</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f8;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 20px;
+            text-align: center;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 600;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .badge-success { background-color: #28a745; color: white; }
+        .badge-danger { background-color: #dc3545; color: white; }
+        .badge-warning { background-color: #ffc107; color: black; }
+
+        .text-muted { color: #777; }
+
+        .no-orders {
+            text-align: center;
+            font-size: 1.2em;
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            table, th, td {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your Order History</h1>
+
+        {% if orders %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Created At</th>
+                    <th>Total Price</th>
+                    <th>Cooking Status</th>
+                    <th>Delivery Status</th>
+                    <th>Payment Method</th>
+                    <th>Payment Status</th>
+                    <th>Cooked by</th>
+                    <th>Delivered by</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>
+                        <a href="{% url 'order_detail' order.id %}">#{{ order.id }}</a>
+                    </td>
+                    <td>{{ order.created_at|date:'d M Y, H:i' }}</td>
+                    <td>₹{{ order.total_price }}</td>
+                    <td>
+                        <span class="badge 
+                            {% if order.get_status_display == 'Cooking' %}badge-warning
+                            {% elif order.get_status_display == 'Completed' %}badge-success
+                            {% else %}badge-danger
+                            {% endif %}
+                        ">
+                            {{ order.get_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge 
+                            {% if order.get_delivery_status_display == 'Delivered' %}badge-success
+                            {% elif order.get_delivery_status_display == 'On the way' %}badge-warning
+                            {% else %}badge-danger
+                            {% endif %}
+                        ">
+                            {{ order.get_delivery_status_display }}
+                        </span>
+                    </td>
+                    <td>{{ order.payment_method }}</td>
+                    <td>{{ order.get_payment_status_display }}</td>
+                    <td>
+                        {% if order.cook %}
+                            {{ order.cook.username }}
+                        {% else %}
+                            <span class="text-muted">Not Assigned</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if order.delivery_person %}
+                            {{ order.delivery_person.username }}
+                        {% else %}
+                            <span class="text-muted">Not Assigned</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-orders">You have no orders yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Local Shops</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #eef1f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    .shop-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .shop-card {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .shop-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .shop-card h3 {
+      margin-top: 0;
+      color: #2980b9;
+      font-size: 1.4em;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .shop-card p {
+      margin: 6px 0;
+      color: #555;
+    }
+
+    .shop-card p strong {
+      color: #2c3e50;
+    }
+
+    .shop-card img {
+      margin-top: 15px;
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+
+    .actions {
+      margin-top: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .actions a {
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 14px;
+      border-radius: 4px;
+      transition: background-color 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .actions a.update {
+      color: #3498db;
+      border-color: #3498db;
+    }
+
+    .actions a.update:hover {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .actions a.delete {
+      color: #e74c3c;
+      border-color: #e74c3c;
+    }
+
+    .actions a.delete:hover {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .actions a.dashboard {
+      background-color: #28a745;
+      color: white;
+      border: none;
+    }
+
+    .actions a.dashboard:hover {
+      background-color: #218838;
+    }
+
+    .no-shops {
+      text-align: center;
+      margin-top: 60px;
+      color: #7f8c8d;
+      font-size: 1.2em;
+    }
+
+    @media (max-width: 600px) {
+      .shop-card {
+        padding: 15px;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .actions a {
+        margin-bottom: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>All Local Shops</h1>
+
+  {% if shops %}
+    <div class="shop-list">
+      {% for shop in shops %}
+        <div class="shop-card">
+          <h3>{{ shop.full_name }}</h3>
+
+          {% if shop.user == request.user %}
+            <p><strong>Shop Number:</strong> {{ shop.shop_number }}</p>
+            <p><strong>GST Number:</strong> {{ shop.gst_number }}</p>
+            <p><strong>Owner Aadhar Number:</strong> {{ shop.owner_aadhar_number }}</p>
+          {% else %}
+            <p><strong>Shop Number:</strong> ****{{ shop.shop_number|stringformat:'s'|slice:'-4:' }}</p>
+            <p><strong>GST Number:</strong> ****{{ shop.gst_number|stringformat:'s'|slice:'-4:' }}</p>
+            <p><strong>Owner Aadhar Number:</strong> ****{{ shop.owner_aadhar_number|stringformat:'s'|slice:'-4:' }}</p>
+          {% endif %}
+
+          <p><strong>Shop Name:</strong> {{ shop.full_name }}</p>
+          <p><strong>Created by:</strong> {{ shop.user.username }}</p>
+
+          {% if shop.shop_photo %}
+            <img src="http://127.0.0.1:8000/main_page{{ shop.shop_photo.url }}" alt="Shop Photo" />
+          {% endif %}
+
+          {% if shop.user == request.user %}
+            <div class="actions">
+              <a href="{% url 'update_shop' shop.id %}" class="update">Update</a>
+              <a href="{% url 'delete_shop' shop.id %}" class="delete">Delete</a>
+              <a href="{% url 'vendor_dashboard_by_shop' shop.id %}" class="dashboard">Go to Dashboard</a>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="no-shops">No shops registered yet.</p>
+  {% endif %}
+
+</body>
+</html>

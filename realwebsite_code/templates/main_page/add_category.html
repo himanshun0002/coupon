@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Category</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      
+      animation: slideBackground 15s linear infinite;
+    }
+
+    @keyframes slideBackground {
+      from {
+        background-position: 0 0;
+      }
+      to {
+        background-position: -200% 0;
+      }
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #333;
+      font-weight: 700;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      background: #f7f7f7;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(45deg, #007bff, #0056b3);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      background: linear-gradient(45deg, #0056b3, #007bff);
+    }
+
+    .icon {
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1><i class="fas fa-folder-plus icon"></i> Add New Category</h1>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <label for="name">Category Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="category_type">Category Type:</label>
+      <select id="category_type" name="category_type" required>
+        <option value="" selected>-- Select Type --</option>
+        {% for value, label in category_types %}
+          <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="image">Category Image:</label>
+      <input type="file" id="image" name="image">
+
+      <button type="submit"><i class="fas fa-plus-circle icon"></i> Add Category</button>
+    </form>
+  </div>
+
+  <script>
+    document.body.style.backgroundImage = "url('{% static 'vendor_desktop/6.avif' %}')";
+  </script>
+</body>
+
+</html>

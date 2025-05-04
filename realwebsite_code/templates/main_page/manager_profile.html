@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Profile</title>
+    <style>
+        /* General styles for both user and manager profiles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .container {
+            width: 40%;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input, textarea, select {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            color: green;
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Manager Profile</h1>
+    </header>
+
+    <div class="container">
+        <h2>Update Manager Profile</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <p class="message">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Full Name -->
+            <label for="full_name">Full Name:</label>
+            <input type="text" id="full_name" name="full_name" placeholder="Full Name" value="{{ manager_profile.full_name }}" required><br>
+
+            <!-- Address -->
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" placeholder="Address">{{ manager_profile.address }}</textarea><br>
+
+            <!-- Gender -->
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="male" {% if manager_profile.gender == "male" %}selected{% endif %}>Male</option>
+                <option value="female" {% if manager_profile.gender == "female" %}selected{% endif %}>Female</option>
+                <option value="other" {% if manager_profile.gender == "other" %}selected{% endif %}>Other</option>
+            </select><br>
+
+            <!-- GST Number -->
+            <label for="gst_number">GST Number:</label>
+            <input type="text" id="gst_number" name="gst_number" placeholder="GST Number" value="{{ manager_profile.gst_number }}" required><br>
+
+            <!-- Shop Number -->
+            <label for="shop_number">Shop Number:</label>
+            <input type="text" id="shop_number" name="shop_number" placeholder="Shop Number" value="{{ manager_profile.shop_number }}" required><br>
+
+            <!-- Aadhar Number -->
+            <label for="owner_aadhar_number">Aadhar Number:</label>
+            <input type="text" id="owner_aadhar_number" name="owner_aadhar_number" placeholder="Aadhar Number" value="{{ manager_profile.owner_aadhar_number }}" required><br>
+
+            <!-- Profile Photo -->
+            <label for="profile_photo">Profile Photo:</label>
+            <input type="file" id="profile_photo" name="profile_photo"><br>
+
+            <!-- Background Photo -->
+            <label for="background_photo">Background Photo:</label>
+            <input type="file" id="background_photo" name="background_photo"><br>
+
+            <!-- Shop Photo -->
+            <label for="shop_photo">Shop Photo:</label>
+            <input type="file" id="shop_photo" name="shop_photo"><br>
+
+            <!-- Aadhar Photo -->
+            <label for="owner_aadhar_photo">Aadhar Photo:</label>
+            <input type="file" id="owner_aadhar_photo" name="owner_aadhar_photo"><br>
+
+            <!-- Selfie with Shop -->
+            <label for="selfie_with_shop">Selfie with Shop:</label>
+            <input type="file" id="selfie_with_shop" name="selfie_with_shop"><br>
+
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Your Company. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

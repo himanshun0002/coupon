@@ -1,0 +1,41 @@
+<!-- local_market_shops.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Market Shops</title>
+    <!-- You can add Bootstrap or any other CSS framework here -->
+</head>
+<body>
+    <h1>Local Market Shops</h1>
+    
+    {% if market_shops %}
+        <div class="shop-list">
+            {% for shop in market_shops %}
+                <div class="shop-item">
+                    <h3>{{ shop.full_name }}</h3>
+                    <p><strong>Shop Number:</strong> {{ shop.shop_number }}</p>
+                    <p><strong>GST Number:</strong> {{ shop.gst_number }}</p>
+                    <p><strong>Owner Aadhar Number:</strong> {{ shop.owner_aadhar_number }}</p>
+                    
+                    {% if shop.shop_photo %}
+                        <img src="{{ shop.shop_photo.url }}" alt="Shop Photo" width="200">
+                    {% else %}
+                        <p>No shop photo available</p>
+                    {% endif %}
+
+                    {% if shop.selfie_with_shop %}
+                        <img src="{{ shop.selfie_with_shop.url }}" alt="Selfie with Shop" width="200">
+                    {% else %}
+                        <p>No selfie with shop available</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No local market shops found.</p>
+    {% endif %}
+</body>
+</html>

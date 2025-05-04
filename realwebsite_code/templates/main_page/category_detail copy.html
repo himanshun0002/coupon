@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.name }}</title>
+</head>
+<body>
+    <h1>{{ category.name }}</h1>
+    <div class="food-items">
+        {% for food in food_items %}
+            <div>
+                <img src="{{ food.image.url }}" alt="{{ food.name }}">
+                <h2>{{ food.name }}</h2>
+                <p>{{ food.description }}</p>
+                <p>Price: ₹{{ food.price }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

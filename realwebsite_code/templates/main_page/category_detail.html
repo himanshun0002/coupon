@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ category.name }} - Swiggy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <style>
+      /* General Styles */
+      body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f7fb;
+        color: #333;
+        line-height: 1.6;
+      }
+      
+      header {
+        background-color: #1e3a8a;
+        color: white;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      header .logo {
+        font-size: 2rem;
+        font-weight: bold;
+      }
+      
+      header nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 1rem;
+        font-weight: 600;
+      }
+      
+      .title {
+        text-align: center;
+        font-size: 2rem;
+        margin: 2rem 0;
+      }
+      
+      .filters {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #555;
+      }
+      
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 2rem;
+        padding: 0 1rem;
+      }
+      
+      .card {
+        background-color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .card img {
+        width: 100%;
+        border-radius: 8px;
+      }
+      
+      .card-content {
+        padding-top: 1rem;
+        text-align: center;
+      }
+      
+      .card h3 {
+        font-size: 1.5rem;
+        margin: 1rem 0;
+      }
+      
+      .cart-quantity {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+      }
+      
+      .cart-quantity button {
+        padding: 0.5rem 1rem;
+        font-size: 1.2rem;
+        background-color: #1e3a8a;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      
+      .cart-btn-container,
+      .chatbot-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 999;
+      }
+      
+      .cart-btn,
+      .chatbot-btn {
+        padding: 15px;
+        font-size: 1.5rem;
+        color: white;
+        background-color: #1e3a8a;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      
+      .cart-btn:hover,
+      .chatbot-btn:hover {
+        background-color: #1e40af;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header Section -->
+    <header>
+      <div class="logo">Swiggy</div>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Offers</a>
+        <a href="#">Help</a>
+      </nav>
+    </header>
+  
+    <!-- Main Content -->
+    <main>
+      <div class="title">{{ category.name }}</div>
+      <div class="filters">{{ food_items|length }} Items to Explore</div>
+  
+      <div class="grid">
+        {% for food in food_items %}
+        <div class="card">
+          <img src="http://127.0.0.1:8000/main_page{{ food.image.url }}" alt="{{ food.name }}">
+          <div class="card-content">
+            <h3>{{ food.name }}</h3>
+            <p>{{ food.description }}</p>
+            <p><strong>Price:</strong> ₹{{ food.price }}</p>
+            <p class="discount">
+              {% if food.discount %}
+                {{ food.discount }}% OFF
+              {% else %}
+                No Discounts
+              {% endif %}
+            </p>
+            <div class="cart-quantity">
+              <button class="decrease-btn">-</button>
+              <span class="quantity" data-food-id="{{ food.id }}">0</span>
+              <button class="increase-btn">+</button>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </main>
+  
+    <!-- Footer Section -->
+    <footer>
+      <p>&copy; {{ current_year }} Swiggy. All rights reserved. <a href="#">Privacy Policy</a></p>
+    </footer>
+  
+    <!-- Floating Buttons -->
+    <div class="cart-btn-container">
+      <button class="cart-btn" data-cart-url="{% url 'view_cart' %}"><i class="fas fa-shopping-cart"></i>&nbsp; Cart</button>
+    </div>
+  
+    <div class="chatbot-container">
+      <button class="chatbot-btn"><i class="fas fa-comments"></i></button>
+    </div>
+  
+    <script>
+      const cartBtns = document.querySelectorAll('.cart-quantity');
+      let cart = JSON.parse(localStorage.getItem('cart')) || {};
+    
+      cartBtns.forEach((btn) => {
+        const decreaseBtn = btn.querySelector('.decrease-btn');
+        const increaseBtn = btn.querySelector('.increase-btn');
+        const quantityDisplay = btn.querySelector('.quantity');
+        const foodId = quantityDisplay.dataset.foodId;
+    
+        // Set initial quantity value from localStorage
+        quantityDisplay.textContent = cart[foodId] || 0;
+    
+        decreaseBtn.addEventListener('click', () => updateQuantity(-1));
+        increaseBtn.addEventListener('click', () => updateQuantity(1));
+    
+        function updateQuantity(change) {
+          let quantity = parseInt(quantityDisplay.textContent);
+          quantity = Math.max(0, quantity + change);
+          quantityDisplay.textContent = quantity;
+    
+          if (quantity === 0) {
+            delete cart[foodId];
+          } else {
+            cart[foodId] = quantity;
+          }
+    
+          localStorage.setItem('cart', JSON.stringify(cart));
+        }
+      });
+    
+      // When clicking the Cart button
+      document.querySelector('.cart-btn').addEventListener('click', function () {
+        const cartUrl = this.getAttribute('data-cart-url');
+        const cartData = JSON.parse(localStorage.getItem('cart')) || {};
+    
+        fetch(cartUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie('csrftoken')  // Include CSRF token
+          },
+          body: JSON.stringify(cartData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          // After saving the cart in the session, redirect to cart page
+          window.location.href = cartUrl;
+        })
+        .catch(error => console.error('Error saving cart:', error));
+      });
+    
+      // Helper to get CSRF token from cookies
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    </script>
+    
+  </body>
+  
+</html>

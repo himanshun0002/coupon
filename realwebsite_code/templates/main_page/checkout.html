@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            border-radius: 8px;
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            font-weight: bold;
+            font-size: 20px;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 16px;
+        }
+
+        .list-group-item div {
+            font-weight: 600;
+        }
+
+        .form-check {
+            margin-bottom: 15px;
+        }
+
+        .form-check input {
+            margin-right: 8px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #218838;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-muted {
+            color: #888;
+        }
+
+        .text-success {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .text-info {
+            color: #17a2b8;
+        }
+
+        .form-check label {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .list-group-item span {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+        }
+
+        .payment-option input {
+            margin-right: 15px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            position: fixed;
+            z-index: 9999;
+            left: 50%;
+            bottom: 30px;
+            padding: 15px;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Checkout</h2>
+
+    <form id="checkoutForm">
+        <!-- Cart Summary -->
+        <div class="card">
+            <div class="card-header">Your Cart</div>
+            <div class="card-body">
+                {% if items %}
+                    <div class="list-group">
+                        {% for item in items %}
+                        <div class="list-group-item">
+                            <div>
+                                <strong>{{ item.name }}</strong> (x{{ item.quantity }})
+                                {% if item.discount %}
+                                    <div class="text-muted">{{ item.discount }}% off</div>
+                                {% endif %}
+                            </div>
+                            <span>₹{{ item.total }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <p class="text-right"><strong>Subtotal:</strong> ₹{{ subtotal }}</p>
+                    <p class="text-right text-success"><strong>Total to Pay:</strong> ₹{{ total_price }}</p>
+                    {% if promo_code %}
+                        <p class="text-right text-info">Promo Applied: {{ promo_code }} ({{ promo_discount }}% off)</p>
+                    {% endif %}
+                {% else %}
+                    <p>Your cart is empty.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Payment Options -->
+        <div class="card">
+            <div class="card-header">Choose Payment Method</div>
+            <div class="card-body">
+                <div class="form-check payment-option">
+                    <input type="radio" name="payment_method" value="COD" id="cod" checked>
+                    <label for="cod">Cash on Delivery</label>
+                </div>
+                <div class="form-check payment-option">
+                    <input type="radio" name="payment_method" value="Card" id="card">
+                    <label for="card">Credit/Debit Card</label>
+                </div>
+                <div class="form-check payment-option">
+                    <input type="radio" name="payment_method" value="UPI" id="upi">
+                    <label for="upi">UPI</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="text-right">
+            <button type="submit" class="btn">Confirm Order & Pay</button>
+        </div>
+    </form>
+</div>
+
+<!-- Success Toast -->
+<div id="successToast" class="toast">
+    Order placed successfully! Order ID: #<span id="orderID"></span>
+</div>
+
+<!-- JavaScript -->
+<script>
+    document.getElementById("checkoutForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+    
+        const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+        const cartData = {{ request.session.cart|safe }};
+    
+        fetch("{% url 'checkout' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                cart: cartData,
+                payment_method: paymentMethod
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.order_id) {
+                // Display success toast with order ID
+                document.getElementById("orderID").innerText = data.order_id;
+                document.getElementById("successToast").classList.add("show");
+
+                // Redirect after 3 seconds
+                setTimeout(function() {
+                    window.location.href = "/orders/" + data.order_id + "/";
+                }, 3000);
+            } else {
+                alert("Something went wrong.");
+            }
+        });
+    });
+
+    // Hide toast after 5 seconds
+    setTimeout(function() {
+        document.getElementById("successToast").classList.remove("show");
+    }, 5000);
+</script>
+
+</body>
+</html>

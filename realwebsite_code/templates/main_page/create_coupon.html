@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Coupon</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .container {
+            width: 50%;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        textarea, input, select, button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Create a New Coupon</h1>
+    </header>
+
+    <div class="container">
+        <h2>Coupon Details</h2>
+
+        {% if error %}
+            <div style="color: red;">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <label for="description">Coupon Description:</label>
+            <textarea name="description" placeholder="Coupon Description" required></textarea>
+            
+            <label for="discount">Discount Percentage:</label>
+            <input type="number" name="discount" placeholder="Discount (%)" required min="1" max="100">
+            
+            <label for="valid_from">Valid From:</label>
+            <input type="datetime-local" name="valid_from" required>
+            
+            <label for="valid_to">Valid Until:</label>
+            <input type="datetime-local" name="valid_to" required>
+            
+            <label for="level">Coupon Level:</label>
+            <select name="level" required>
+                <option value="online">Online</option>
+                <option value="market">Market</option>
+                <option value="special">Special</option>
+            </select>
+
+            {% if request.user.role == "manager" %}
+                <label for="upload_image_checkbox">Do you want to upload an image?</label>
+                <input type="checkbox" id="upload_image_checkbox">
+                
+                <div id="image_upload_div" style="display: none; margin-top: 10px;">
+                    <label for="image">Upload Coupon Image:</label>
+                    <input type="file" name="image" accept="image/*">
+                </div>
+            {% elif request.user.role == "user" %}
+                <label for="image">Upload Coupon Image (Required):</label>
+                <input type="file" name="image" accept="image/*" required>
+            {% endif %}
+            
+            <button type="submit">Create Coupon</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Your Company. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const checkbox = document.getElementById("upload_image_checkbox");
+        const imageDiv = document.getElementById("image_upload_div");
+
+        if (checkbox) {
+            checkbox.addEventListener("change", function() {
+                if (this.checked) {
+                    imageDiv.style.display = "block";
+                } else {
+                    imageDiv.style.display = "none";
+                }
+            });
+        }
+    });
+    </script>
+
+</body>
+
+</html>

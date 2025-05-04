@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Available Coupons</title>
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fa;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background-color: #007bff;
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+      }
+
+      .container {
+        width: 80%;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: #333;
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .error-message {
+        color: red;
+        font-size: 16px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .coupon-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      .coupon-card {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .coupon-card:hover {
+        background-color: #f0f0f0;
+        transform: translateY(-5px);
+      }
+
+      .coupon-image {
+        width: 100%;
+        height: 300px;
+        object-fit: contain; /* This will ensure the full image is shown */
+        border-bottom: 1px solid #ddd;
+      }
+
+      .coupon-details {
+        padding: 15px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .coupon-details h3 {
+        color: #007bff;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+
+      .coupon-details p {
+        margin: 5px 0;
+      }
+
+      .claim-btn {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 8px 16px;
+        background-color: #28a745;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .claim-btn:hover {
+        background-color: #218838;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 50px;
+        padding: 10px;
+        background-color: #333;
+        color: white;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          width: 90%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Available Coupons</h1>
+    </header>
+
+    <div class="container">
+      <h2>Available Coupons</h2>
+
+      {% if error %}
+        <p class="error-message">{{ error }}</p>
+      {% endif %}
+
+      <div class="coupon-grid">
+        {% for coupon in coupons %}
+          <div class="coupon-card">
+            {% if coupon.image %}
+              <img src="http://127.0.0.1:8000/main_page{{ coupon.image.url }}" alt="Coupon Image" class="coupon-image" />
+            {% endif %}
+            <div class="coupon-details">
+              <h3>{{ coupon.code }}</h3>
+              <p>{{ coupon.description }}</p>
+              <p><strong>Discount:</strong> {{ coupon.discount }}%</p>
+              <p><strong>Valid Until:</strong> {{ coupon.valid_to|date:"Y-m-d" }}</p>
+              <p><strong>Level:</strong> {{ coupon.level|title }}</p>
+              <a href="{% url 'claim_coupon' coupon_id=coupon.id %}" class="claim-btn">Claim Coupon</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Your Company. All Rights Reserved.</p>
+    </footer>
+  </body>
+</html>

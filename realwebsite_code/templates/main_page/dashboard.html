@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(to right, #f8f9fa, #e9ecef);
+        color: #212529;
+      }
+      
+      header {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        padding: 30px 0;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+      }
+      
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin-bottom: 15px;
+      }
+      
+      h2 {
+        font-size: 28px;
+        color: #343a40;
+      }
+      
+      h4 {
+        margin-top: 20px;
+        color: #007bff;
+      }
+      
+      p {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 10px;
+      }
+      
+      .role-section {
+        background-color: #f1f3f5;
+        border-left: 4px solid #007bff;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 30px;
+      }
+      
+      .profile-card {
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      
+      img {
+        border-radius: 6px;
+        margin-top: 10px;
+        width: 100px;
+        height: auto;
+      }
+      
+      .btn-group {
+        margin-top: 30px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      
+      .btn {
+        padding: 12px 24px;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+      
+      .btn:hover {
+        background-color: #0056b3;
+      }
+      
+      footer {
+        text-align: center;
+        margin-top: 60px;
+        padding: 15px 0;
+        background-color: #343a40;
+        color: #f8f9fa;
+      }
+      
+      @media (max-width: 600px) {
+        .container {
+          margin: 20px;
+          padding: 20px;
+        }
+      
+        h2 {
+          font-size: 22px;
+        }
+      
+        .btn {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Welcome to Your Dashboard</h1>
+    </header>
+
+    <div class="container">
+      <h2>Hi, {{ user.username }} 👋</h2>
+      <p>
+        <strong>Role:</strong> {{ user.role|title }}
+      </p>
+      <p>
+        <strong>Level:</strong> {{ user.level|title }}
+      </p>
+
+      <div class="role-section">
+        {% if user.role == 'admin' %}
+          <h3>Admin Panel</h3>
+          <p>You have full access to manage users, settings, and roles across the platform.</p>
+        {% elif user.role == 'manager' %}
+          <h3>Manager Panel</h3>
+          <p>You can manage users in your assigned level and view performance reports.</p>
+
+          {% if manager_profile %}
+            <div class="profile-card">
+              <h4>Manager Details</h4>
+              <p>
+                <strong>Full Name:</strong> {{ manager_profile.full_name }}
+              </p>
+              <p>
+                <strong>Address:</strong> {{ manager_profile.address }}
+              </p>
+              <p>
+                <strong>Gender:</strong> {{ manager_profile.gender }}
+              </p>
+              <p>
+                <strong>GST Number:</strong> {{ manager_profile.gst_number }}
+              </p>
+              <p>
+                <strong>Shop Number:</strong> {{ manager_profile.shop_number }}
+              </p>
+              <p>
+                <strong>Aadhar Number:</strong> {{ manager_profile.owner_aadhar_number }}
+              </p>
+
+              {% if manager_profile.profile_photo %}
+                <p>
+                  <strong>Profile Photo:</strong><br />
+                  <img src="http://127.0.0.1:8000/main_page{{ manager_profile.profile_photo.url }}" />
+                </p>
+              {% endif %}
+
+              {% if manager_profile.background_photo %}
+                <p>
+                  <strong>Background Photo:</strong><br />
+                  <img src="http://127.0.0.1:8000/main_page{{ manager_profile.background_photo.url }}" />
+                </p>
+              {% endif %}
+
+              {% if manager_profile.shop_photo %}
+                <p>
+                  <strong>Shop Photo:</strong><br />
+                  <img src="http://127.0.0.1:8000/main_page{{ manager_profile.shop_photo.url }}" />
+                </p>
+              {% endif %}
+
+              {% if manager_profile.owner_aadhar_photo %}
+                <p>
+                  <strong>Aadhar Photo:</strong><br />
+                  <img src="http://127.0.0.1:8000/main_page{{ manager_profile.owner_aadhar_photo.url }}" />
+                </p>
+              {% endif %}
+
+              {% if manager_profile.selfie_with_shop %}
+                <p>
+                  <strong>Selfie with Shop:</strong><br />
+                  <img src="http://127.0.0.1:8000/main_page{{ manager_profile.selfie_with_shop.url }}" />
+                </p>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% elif user.role == 'user' %}
+          <h3>User Dashboard</h3>
+          <p>Welcome to the system! You can explore your profile and available features.</p>
+
+          {% if user_profile %}
+            <div class="profile-card">
+              <h4>User Details</h4>
+              <p>
+                <strong>Full Name:</strong> {{ user_profile.full_name }}
+              </p>
+              <p>
+                <strong>Address:</strong> {{ user_profile.address }}
+              </p>
+              <p>
+                <strong>Gender:</strong> {{ user_profile.gender }}
+              </p>
+
+              {% if user_profile.profile_photo %}
+                <p>
+                  <strong>Profile Photo:</strong><br />
+                  <img src="http://127.0.0.1:8000/main_page{{ user_profile.profile_photo.url }}" />
+                </p>
+              {% endif %}
+
+              {% if user_profile.background_photo %}
+                <p>
+                  <strong>Background Photo:</strong><br />
+                  <img src="http://127.0.0.1:8000/main_page{{ user_profile.background_photo.url }}" />
+                </p>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endif %}
+
+        <!-- ✅ Coupon Section -->
+        {% if coupon_count > 0 %}
+          <div class="role-section">
+            <h3>Your Coupons ({{ coupon_count }})</h3>
+
+            {% for coupon in coupons %}
+              <div class="profile-card">
+                <p>
+                  <strong>Code:</strong> {{ coupon.code }}
+                </p>
+                <p>
+                  <strong>Description:</strong> {{ coupon.description }}
+                </p>
+                <p>
+                  <strong>Discount:</strong> {{ coupon.discount }}%
+                </p>
+                <p>
+                  <strong>Valid From:</strong> {{ coupon.valid_from|date:'Y-m-d H:i' }}
+                </p>
+                <p>
+                  <strong>Valid To:</strong> {{ coupon.valid_to|date:'Y-m-d H:i' }}
+                </p>
+                <p>
+                  <strong>Is Active:</strong> {{ coupon.is_active }}
+                </p>
+
+                {% if coupon.image %}
+                  <p>
+                    <strong>Coupon Image:</strong><br />
+                    <img src="http://127.0.0.1:8000/main_page{{ coupon.image.url }}" style="max-width: 200px; margin-top: 10px;" />
+                  </p>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="role-section">
+            <h3>Your Coupons</h3>
+            <p>You haven't created any coupons yet.</p>
+          </div>
+        {% endif %}
+
+        <div class="btn-group">
+          {% if user.role == 'manager' %}
+            <a href="{% url 'manager_profile' %}" class="btn">Go to Manager Profile</a>
+          {% elif user.role == 'user' %}
+            <a href="{% url 'user_profile' %}" class="btn">Go to User Profile</a>
+          {% endif %}
+          <a href="{% url 'logout_view' %}" class="btn">Logout</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Your Company. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

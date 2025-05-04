@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cook Dashboard - Orders</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        thead {
+            background-color: #333;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 12px;
+            color: white;
+            font-size: 0.85em;
+            display: inline-block;
+        }
+
+        .bg-secondary { background-color: #6c757d; }
+        .bg-warning { background-color: #ffc107; color: #212529; }
+        .bg-success { background-color: #28a745; }
+
+        .btn {
+            padding: 6px 12px;
+            text-decoration: none;
+            font-size: 0.85em;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .btn-outline-primary {
+            border: 1px solid #007bff;
+            color: #007bff;
+            background-color: transparent;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .text-muted {
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 15px;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 10px;
+            }
+
+            td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                top: 12px;
+                font-weight: bold;
+                color: #555;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Cook Orders</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Status</th>
+                    <th>Cook</th>
+                    <th>Created</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td data-label="Order ID">#{{ order.id }}</td>
+                    <td data-label="Status">
+                        <span class="badge 
+                            {% if order.status == 'pending' %}bg-secondary
+                            {% elif order.status == 'cooking' %}bg-warning
+                            {% elif order.status == 'ready' %}bg-success
+                            {% endif %}
+                        ">
+                            {{ order.get_status_display }}
+                        </span>
+                    </td>
+                    <td data-label="Cook">
+                        {% if order.cook %}
+                            {{ order.cook.username }}
+                        {% else %}
+                            <span class="text-muted">Not Assigned</span>
+                        {% endif %}
+                    </td>
+                    <td data-label="Created">{{ order.created_at|date:"d M Y, H:i" }}</td>
+                    <td data-label="Price">₹{{ order.total_price }}</td>
+                    <td data-label="Actions">
+                        {% if order.status == 'pending' %}
+                            <a href="{% url 'mark_order_cooked' order.id %}" class="btn btn-outline-primary">Start Cooking</a>
+                        {% elif order.status == 'cooking' %}
+                            <a href="{% url 'mark_order_cooked' order.id %}" class="btn btn-success">Mark Ready</a>
+                        {% else %}
+                            <span class="text-muted">No Action</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-muted text-center">No orders to show.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

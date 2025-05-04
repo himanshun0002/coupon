@@ -1,0 +1,41 @@
+
+{% extends 'main_page/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Edit Category</h2>
+    
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="name" class="form-label">Category Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ category.name }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Category Image</label>
+            <input type="file" class="form-control" id="image" name="image">
+            {% if category.image %}
+                <p>Current Image:</p>
+                <img src="http://127.0.0.1:8000/main_page{{ category.image.url }}" alt="Category Image" class="img-thumbnail" width="150">
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Category</button>
+        <a href="{% url 'vendor_dashboard' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+
+    <h4 class="mt-4">Edit History</h4>
+    <ul class="list-group">
+        {% for entry in category.user_name_Category %}
+            <li class="list-group-item">
+                Edited by: {{ entry.user }} on {{ entry.timestamp }}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
