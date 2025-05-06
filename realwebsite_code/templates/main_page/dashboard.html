@@ -283,13 +283,14 @@
             <p>You haven't created any coupons yet.</p>
           </div>
         {% endif %}
-
+        
         <div class="btn-group">
           {% if user.role == 'manager' %}
             <a href="{% url 'manager_profile' %}" class="btn">Go to Manager Profile</a>
           {% elif user.role == 'user' %}
             <a href="{% url 'user_profile' %}" class="btn">Go to User Profile</a>
-          {% endif %}
+            <a href="{% url 'create_coupon' %}" class="btn">Go to create coupon</a>
+            {% endif %}
           <a href="{% url 'logout_view' %}" class="btn">Logout</a>
         </div>
       </div>

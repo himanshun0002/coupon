@@ -20,9 +20,7 @@ urlpatterns = [
     path("request_login_otp/", request_login_otp, name="request_login_otp"),
     path("verify_login_otp/", verify_login_otp, name="verify_login_otp"),
     path("generate_promo_code/", generate_promo_code, name="generate_promo_code"),
-    path(
-        "verify_otp/", verify_otp1, name="verify_otp1"
-    ), 
+    path("verify_otp/", verify_otp1, name="verify_otp1"),
     path("use_promo_code/", use_promo_code, name="use_promo_code"),
     ##############swiggy
     path("a", views.vendor_dashboard, name="vendor_dashboard"),
@@ -89,11 +87,33 @@ urlpatterns = [
     path("manager_shop_list/", views.manager_shop_list, name="manager_shop_list"),
     path("shop/<int:shop_id>/update/", views.update_shop, name="update_shop"),
     path("shop/<int:shop_id>/delete/", views.delete_shop, name="delete_shop"),
-    path('dashboard/shop/<int:shop_id>/', views.vendor_dashboard_by_shop, name='vendor_dashboard_by_shop'),
+    path(
+        "dashboard/shop/<int:shop_id>/",
+        views.vendor_dashboard_by_shop,
+        name="vendor_dashboard_by_shop",
+    ),
+    
+    
+    
+    
+    
+    
+    
+    #########################################   RETALOR #########
+    
+    path('realtor_list', views.realtor_list, name='realtor_list'),
+    
+    path('realtors_dashboard',views.realtors_admin,name ='realtors_admin'),
+    path('create/', views.realtor_create, name='realtor_create'),
+    path('edit/<int:pk>/', views.realtor_edit, name='realtor_edit'),
+    path('delete/<int:pk>/', views.realtor_delete, name='realtor_delete'),
+    path('listing_list', views.listing_list, name='listing_list'),
+    path('listing/<int:pk>/', views.listing_detail, name='listing_detail'),
+    path('listing/create/', views.listing_create, name='listing_create'),
+    path('listing/update/<int:pk>/', views.listing_update, name='listing_update'),
+    path('listing/delete/<int:pk>/', views.listing_delete, name='listing_delete'),
 
-
-
-
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -118,3 +118,13 @@ Time: 0:51
 Phone Number: +7011851165
 Message: Your OTP for coupon redemption is: 726311. Please enter this code to proceed.
 --------------------
+Date: 5/5/2025
+Time: 12:12
+Phone Number: +9548809576
+Message: Your OTP for coupon redemption is: 993355. Please enter this code to proceed.
+--------------------
+Date: 5/5/2025
+Time: 12:13
+Phone Number: +9548809576
+Message: Your OTP for coupon redemption is: 955731. Please enter this code to proceed.
+--------------------

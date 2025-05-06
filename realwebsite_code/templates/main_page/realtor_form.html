@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create/Edit Realtor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            margin-top: 270px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="email"], textarea, input[type="file"], input[type="checkbox"] {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        textarea {
+            resize: vertical;
+            height: 120px;
+        }
+        input[type="checkbox"] {
+            width: auto;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{% if realtor %}Edit{% else %}Create{% endif %} Realtor</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{% if realtor %}{{ realtor.name }}{% endif %}" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required>{% if realtor %}{{ realtor.description }}{% endif %}</textarea>
+
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" value="{% if realtor %}{{ realtor.phone }}{% endif %}" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{% if realtor %}{{ realtor.email }}{% endif %}" required>
+
+            <label for="is_mvp">Is MVP:</label>
+            <input type="checkbox" id="is_mvp" name="is_mvp" {% if realtor and realtor.is_mvp %}checked{% endif %}>
+
+            <label for="photo">Photo:</label>
+            <input type="file" id="photo" name="photo">
+
+            <button type="submit">{% if realtor %}Update{% else %}Create{% endif %}</button>
+        </form>
+        
+        <div class="back-link">
+            <a href="{% url 'realtor_list' %}">Back to Realtor List</a>
+        </div>
+    </div>
+</body>
+</html>

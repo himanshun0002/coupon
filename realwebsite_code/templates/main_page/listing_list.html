@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listing List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Customizing the header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .header .user-info {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        /* Card styles */
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-img-top {
+            object-fit: cover;
+            height: 200px;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        .card .btn {
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+
+        .btn-info {
+            background-color: #3498db;
+            border: none;
+        }
+
+        .btn-warning {
+            background-color: #f39c12;
+            border: none;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            border: none;
+        }
+
+        .btn-info:hover,
+        .btn-warning:hover,
+        .btn-danger:hover {
+            opacity: 0.85;
+        }
+
+        /* Button to add new listing */
+        .btn-add-listing {
+            font-size: 1.1rem;
+            padding: 12px 25px;
+            border-radius: 25px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-add-listing:hover {
+            background-color: #27ae60;
+        }
+
+        /* Adjusting spacing between cards */
+        .row {
+            gap: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <!-- Header with user info on the right side -->
+        <div class="header">
+            <h1>Listing of Properties</h1>
+            <div class="user-info">
+                {% if user.is_authenticated %}
+                    <span>Welcome, {{ user.username }}</span>
+                    <a href="{% url 'logout_view' %}" class="btn btn-outline-danger btn-sm ml-3">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline-success btn-sm">Login</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Button to add new listing -->
+        <a href="{% url 'listing_create' %}" class="btn-add-listing">+ Add New Listing</a>
+
+        <!-- Listings Grid -->
+        <div class="row mt-4">
+            {% for listing in listings %}
+                <div class="col-md-4 col-sm-6 col-12 mb-4">
+                    <div class="card">
+                        <img src="http://127.0.0.1:8000/main_page{{ listing.photo_main.url }}" class="card-img-top" alt="{{ listing.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ listing.title }}</h5>
+                            <p class="card-text">{{ listing.description|truncatewords:20 }}</p>
+                            <a href="{% url 'listing_detail' pk=listing.pk %}" class="btn btn-info">View Details</a>
+                            <a href="{% url 'listing_update' pk=listing.pk %}" class="btn btn-warning">Edit</a>
+                            <a href="{% url 'listing_delete' pk=listing.pk %}" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

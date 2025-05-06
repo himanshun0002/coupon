@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.crypto import get_random_string
-from .models import Coupon
+from .models import Coupon ,Realtor
 from django.utils import timezone
 
 
@@ -1225,3 +1225,248 @@ def shop_role_based_redirect(request):
             return redirect("register_shop")  # First-time login, show registration
     else:
         return redirect("user_shop_list")  # Other roles go to general shop list
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####################################################
+
+
+
+
+
+
+
+
+from django.shortcuts import render
+
+# Create your views here.
+
+
+def realtors_admin(request):
+    return render(request, "main_page/realtors_admin.html")
+
+
+
+# View for listing all realtors
+def realtor_list(request):
+    realtors = Realtor.objects.all()
+    return render(request, "main_page/realtor_list.html", {"realtors": realtors})
+
+
+
+
+
+# View for creating a new realtor
+def realtor_create(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        phone = request.POST.get("phone")
+        email = request.POST.get("email")
+        is_mvp = request.POST.get("is_mvp") == "on"
+        hire_date = datetime.now()
+
+        # Handling file upload
+        if request.FILES.get("photo"):
+            photo = request.FILES["photo"]
+            fs = FileSystemStorage()
+            photo_path = fs.save(photo.name, photo)
+        else:
+            photo_path = None
+
+        # Creating a new Realtor object
+        realtor = Realtor(
+            name=name,
+            description=description,
+            phone=phone,
+            email=email,
+            is_mvp=is_mvp,
+            hire_date=hire_date,
+            photo=photo_path,
+        )
+        realtor.save()
+        return redirect("realtor_list")
+    return render(request, "main_page/realtor_form.html")
+
+from datetime import datetime
+# View for editing an existing realtor
+def realtor_edit(request, pk):
+    realtor = get_object_or_404(Realtor, pk=pk)
+    if request.method == "POST":
+        realtor.name = request.POST.get("name")
+        realtor.description = request.POST.get("description")
+        realtor.phone = request.POST.get("phone")
+        realtor.email = request.POST.get("email")
+        realtor.is_mvp = request.POST.get("is_mvp") == "on"
+        realtor.hire_date = datetime.now()
+
+        # Handling file upload (if a new photo is uploaded)
+        if request.FILES.get("photo"):
+            photo = request.FILES["photo"]
+            fs = FileSystemStorage()
+            photo_path = fs.save(photo.name, photo)
+            realtor.photo = photo_path
+
+        realtor.save()
+        return redirect("realtor_list")
+
+    return render(request, "main_page/realtor_form.html", {"realtor": realtor})
+
+
+# View for deleting a realtor
+def realtor_delete(request, pk):
+    realtor = get_object_or_404(Realtor, pk=pk)
+    if request.method == "POST":
+        realtor.delete()
+        return redirect("realtor_list")
+    return render(
+        request, "main_page/realtor_confirm_delete.html", {"realtor": realtor}
+    )
+
+
+# List all listings
+def listing_list(request):
+    listings = Listing.objects.all()
+    return render(request, "main_page/listing_list.html", {"listings": listings})
+
+
+# Detail view of a single listing
+def listing_detail(request, pk):
+    listing = get_object_or_404(Listing, pk=pk)
+    return render(request, "main_page/listing_detail.html", {"listing": listing})
+
+
+# Update an existing listing
+@login_required  # Ensure that only logged-in users can update listings
+def listing_update(request, pk):
+    listing = get_object_or_404(Listing, pk=pk)
+
+    # Ensure that only the realtor who created the listing can update it
+    if listing.realtor != request.user.realtor:
+        return HttpResponse(
+            "You do not have permission to edit this listing.", status=403
+        )
+
+    if request.method == "POST":
+        listing.title = request.POST.get("title")
+        listing.description = request.POST.get("description")
+        listing.price = request.POST.get("price")
+        listing.bedrooms = request.POST.get("bedrooms")
+        listing.bathrooms = request.POST.get("bathrooms")
+        listing.garage = request.POST.get("garage")
+        listing.sqft = request.POST.get("sqft")
+        listing.lot_size = request.POST.get("lot_size")
+        if "photo_main" in request.FILES:
+            listing.photo_main = request.FILES.get("photo_main")
+        listing.is_published = request.POST.get("is_published") == "on"
+
+        listing.save()
+        return redirect("listing_detail", pk=listing.pk)
+
+    return render(request, "main_page/listing_update.html", {"listing": listing})
+
+
+# Delete a listing
+@login_required  # Ensure that only logged-in users can delete listings
+def listing_delete(request, pk):
+    listing = get_object_or_404(Listing, pk=pk)
+
+    # Ensure that only the realtor who created the listing can delete it
+    if listing.realtor != request.user.realtor:
+        return HttpResponse(
+            "You do not have permission to delete this listing.", status=403
+        )
+
+    if request.method == "POST":
+        listing.delete()
+        return redirect("listing_list")
+
+    return render(
+        request, "main_page/listing_confirm_delete.html", {"listing": listing}
+    )
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseBadRequest
+# from listings.models import Listing  # Ensure this import is correct based on your app structure
+from .models import Listing
+@login_required
+def listing_create(request):
+    if request.method == "POST":
+        # Ensure user has an associated Realtor; if not, create one automatically
+        realtor, created = Realtor.objects.get_or_create(user=request.user)
+
+        # Proceed with listing creation as before
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        price = request.POST.get("price")
+        bedrooms = request.POST.get("bedrooms")
+        bathrooms = request.POST.get("bathrooms")
+        garage = request.POST.get("garage")
+        sqft = request.POST.get("sqft")
+        lot_size = request.POST.get("lot_size")
+        photo_main = request.FILES.get("photo_main")
+        is_published = request.POST.get("is_published") == "on"
+
+        # Create the listing
+        Listing.objects.create(
+            realtor=realtor,
+            title=title,
+            description=description,
+            price=price,
+            bedrooms=bedrooms,
+            bathrooms=bathrooms,
+            garage=garage,
+            sqft=sqft,
+            lot_size=lot_size,
+            photo_main=photo_main,
+            is_published=is_published,
+        )
+
+        return redirect("listing_list")
+
+    return render(request, "main_page/listing_create.html")
