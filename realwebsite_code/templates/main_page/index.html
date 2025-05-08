@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome | Property Listings</title>
+  
+  <!-- Bootstrap CSS (CDN) -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #f4f6f8;
+    }
+
+    #top-bar {
+      background-color: #1D3557;
+      padding: 15px 0;
+    }
+    
+    #top-bar .social a {
+      color: white;
+      font-size: 18px;
+      margin: 0 10px;
+    }
+    
+    #top-bar .social a:hover {
+      color: #FFD700;
+    }
+    
+    #showcase {
+      background: linear-gradient(45deg, #1D3557, #4AB8A1, #F4A261);
+      color: white;
+      padding: 60px 0;
+    }
+    
+    #showcase h1 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+    }
+    
+    .carousel-item img {
+      height: 400px;
+      object-fit: cover;
+    }
+    
+    .card {
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .listing-heading h4 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+    }
+    
+    .btn-primary {
+      background-color: #FF6B6B;
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      background-color: #E63946;
+    }
+    
+    #main-footer {
+      background-color: #1D3557;
+      color: white;
+      padding: 30px 0;
+    }
+    
+    .search-form input, .search-form select {
+      border-radius: 50px;
+      margin-bottom: 15px;
+      padding: 15px;
+      font-size: 16px;
+    }
+    
+    .search-form button {
+      border-radius: 50px;
+      padding: 15px;
+      font-size: 16px;
+      width: 100%;
+      background-color: #FF6B6B;
+      border: none;
+      color: white;
+    }
+
+    .search-form button:hover {
+      background-color: #E63946;
+    }
+    
+    .service-box {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      padding: 30px;
+      background-color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .service-box:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .service-box i {
+      color: #FF6B6B;
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <section id="top-bar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <i class="fas fa-phone"></i> +91 1234567890
+        </div>
+        <div class="col-md-4">
+          <i class="fas fa-envelope-open"></i> contact@realestate.com
+        </div>
+        <div class="col-md-4 text-right">
+          <div class="social">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-pinterest"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="https://via.placeholder.com/150" class="logo" alt="Logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Listings</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Register</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Showcase Section -->
+  <section id="showcase">
+    <div class="container text-center">
+      <h1 class="display-4 font-weight-bold mb-4">Property Searching Made Easy</h1>
+      <p class="lead mb-4">Find your dream property with just a few clicks. Start your search today!</p>
+      
+      <div class="search-form">
+        <form>
+          <div class="form-row">
+            <div class="col-md-4">
+              <input type="text" class="form-control" placeholder="Keyword (Pool, Garage, etc)">
+            </div>
+            <div class="col-md-4">
+              <input type="text" class="form-control" placeholder="City">
+            </div>
+            <div class="col-md-4">
+              <select class="form-control">
+                <option selected>State (All)</option>
+                <option>CA</option>
+                <option>NY</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row mt-3">
+            <div class="col-md-6">
+              <select class="form-control">
+                <option selected>Bedrooms (All)</option>
+                <option>1</option>
+                <option>2</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <select class="form-control">
+                <option selected>Max Price (Any)</option>
+                <option>$100,000</option>
+                <option>$500,000</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary mt-4">Search Listings</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Listings Section -->
+  <section id="listings" class="py-5">
+    <div class="container">
+      <h3 class="text-center mb-5 font-weight-bold">Latest Listings</h3>
+      <div class="row">
+        <!-- Sample Listing -->
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1170" class="d-block w-100" alt="Listing Image">
+            <div class="card-body">
+              <div class="listing-heading text-center mb-3">
+                <h4 class="text-primary">Modern Family Home</h4>
+                <p class="text-muted"><i class="fas fa-map-marker-alt"></i> Los Angeles, CA 90001</p>
+              </div>
+              <div class="row text-secondary">
+                <div class="col-6"><i class="fas fa-th-large"></i> Sqft: 2200</div>
+                <div class="col-6"><i class="fas fa-car"></i> Garage: 2</div>
+              </div>
+              <div class="row text-secondary">
+                <div class="col-6"><i class="fas fa-bed"></i> Bedrooms: 4</div>
+                <div class="col-6"><i class="fas fa-bath"></i> Bathrooms: 3</div>
+              </div>
+              <hr />
+              <p><i class="fas fa-clock"></i> Listed 3 days ago</p>
+              <a href="#" class="btn btn-primary btn-block">More Info</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="py-5 bg-light">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md-4 mb-4">
+          <div class="service-box">
+            <i class="fas fa-comment"></i>
+            <h3>Consulting Services</h3>
+            <p>Expert advice and guidance for your real estate investments.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="service-box">
+            <i class="fas fa-home"></i>
+            <h3>Property Management</h3>
+            <p>Comprehensive property management services for your investment.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="service-box">
+            <i class="fas fa-suitcase"></i>
+            <h3>Renting & Selling</h3>
+            <p>We assist with all aspects of renting or selling properties.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="main-footer" class="text-center">
+    <p>&copy; <span class="year"></span> Real Estate</p>
+  </footer>
+
+  <!-- Bootstrap JS and dependencies (CDN) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Set current year for the footer
+    document.querySelector('.year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

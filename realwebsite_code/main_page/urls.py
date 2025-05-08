@@ -112,7 +112,13 @@ urlpatterns = [
     path('listing/create/', views.listing_create, name='listing_create'),
     path('listing/update/<int:pk>/', views.listing_update, name='listing_update'),
     path('listing/delete/<int:pk>/', views.listing_delete, name='listing_delete'),
-
+    
+    path('listings', views.listings, name='listings'),
+    path('<int:listing_id>', views.listing, name='listing'),
+    path('search', views.search, name='search'),
+    
+    path('realindex',views.realindex,name ='realindex'),
+    path('about',views.about,name ='about'),
     
 ]
 if settings.DEBUG:
