@@ -1,144 +1,182 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Welcome | Property Listings</title>
-  
-  <!-- Bootstrap CSS (CDN) -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  
-  <style>
-    body {
-      font-family: 'Open Sans', sans-serif;
-      background-color: #f4f6f8;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Welcome | Property Listings</title>
 
-    #top-bar {
-      background-color: #1D3557;
-      padding: 15px 0;
-    }
-    
-    #top-bar .social a {
-      color: white;
-      font-size: 18px;
-      margin: 0 10px;
-    }
-    
-    #top-bar .social a:hover {
-      color: #FFD700;
-    }
-    
-    #showcase {
-      background: linear-gradient(45deg, #1D3557, #4AB8A1, #F4A261);
-      color: white;
-      padding: 60px 0;
-    }
-    
-    #showcase h1 {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-    }
-    
-    .carousel-item img {
-      height: 400px;
-      object-fit: cover;
-    }
-    
-    .card {
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-    
-    .listing-heading h4 {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 500;
-    }
-    
-    .btn-primary {
-      background-color: #FF6B6B;
-      border: none;
-    }
-    
-    .btn-primary:hover {
-      background-color: #E63946;
-    }
-    
-    #main-footer {
-      background-color: #1D3557;
-      color: white;
-      padding: 30px 0;
-    }
-    
-    .search-form input, .search-form select {
-      border-radius: 50px;
-      margin-bottom: 15px;
-      padding: 15px;
-      font-size: 16px;
-    }
-    
-    .search-form button {
-      border-radius: 50px;
-      padding: 15px;
-      font-size: 16px;
-      width: 100%;
-      background-color: #FF6B6B;
-      border: none;
-      color: white;
-    }
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
 
-    .search-form button:hover {
-      background-color: #E63946;
-    }
-    
-    .service-box {
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      border-radius: 8px;
-      padding: 30px;
-      background-color: white;
-      transition: transform 0.3s ease;
-    }
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@300;500&display=swap" rel="stylesheet" />
 
-    .service-box:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 
-    .service-box i {
-      color: #FF6B6B;
-      font-size: 3rem;
-      margin-bottom: 20px;
-    }
-
-  </style>
-</head>
-<body>
-
-  <!-- Top Bar -->
-  <section id="top-bar">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <i class="fas fa-phone"></i> +91 1234567890
-        </div>
-        <div class="col-md-4">
-          <i class="fas fa-envelope-open"></i> contact@realestate.com
-        </div>
-        <div class="col-md-4 text-right">
-          <div class="social">
+    <style>
+      body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: #f8f9fa;
+      }
+      
+      #top-bar {
+        background-color: #1d3557;
+        color: white;
+        padding: 10px 0;
+      }
+      
+      #top-bar .social a {
+        color: white;
+        font-size: 18px;
+        margin: 0 8px;
+      }
+      
+      #top-bar .social a:hover {
+        color: #ffd700;
+      }
+      
+      #showcase {
+        background: linear-gradient(135deg, #1d3557, #4ab8a1);
+        color: white;
+        padding: 80px 0 60px;
+        text-align: center;
+      }
+      
+      #showcase h1 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+      }
+      
+      .search-form {
+        background-color: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+      }
+      
+      .search-form input,
+      .search-form select {
+        border-radius: 30px;
+        margin-bottom: 15px;
+        padding: 12px 20px;
+      }
+      
+      .search-form button {
+        border-radius: 30px;
+        padding: 12px;
+        background-color: #ff6b6b;
+        border: none;
+        width: 100%;
+        color: white;
+        font-weight: bold;
+        transition: background 0.3s;
+      }
+      
+      .search-form button:hover {
+        background-color: #e63946;
+      }
+      
+      .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      
+      .card:hover {
+        transform: translateY(-8px);
+      }
+      
+      .card img {
+        height: 240px;
+        object-fit: cover;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+      
+      .listing-heading h4 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+      
+      .service-box {
+        background-color: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        transition: 0.3s ease-in-out;
+      }
+      
+      .service-box:hover {
+        transform: translateY(-5px);
+      }
+      
+      .service-box i {
+        font-size: 2.5rem;
+        color: #ff6b6b;
+        margin-bottom: 15px;
+      }
+      
+      #main-footer {
+        background-color: #1d3557;
+        color: white;
+        padding: 20px 0;
+      }
+      @media (max-width: 768px) {
+        #top-bar .row > div {
+          text-align: center !important;
+          margin-bottom: 10px;
+        }
+      
+        .search-form .form-row > .col-md-4,
+        .search-form .form-row > .col-md-6 {
+          margin-bottom: 10px;
+        }
+      
+        .search-form {
+          padding: 20px;
+        }
+      
+        .navbar-nav {
+          text-align: center;
+        }
+      
+        .navbar-nav .nav-item {
+          margin: 10px 0;
+        }
+      
+        .listing-heading h4 {
+          font-size: 1.1rem;
+        }
+      
+        .card-body p,
+        .card-body div {
+          font-size: 0.9rem;
+        }
+      
+        .service-box {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Bar -->
+    <section id="top-bar">
+      <div class="container">
+        <div class="row text-center text-md-left">
+          <div class="col-md-4 mb-2 mb-md-0">
+            <i class="fas fa-phone"></i> +91 1234567890
+          </div>
+          <div class="col-md-4 mb-2 mb-md-0">
+            <i class="fas fa-envelope-open"></i> contact@realestate.com
+          </div>
+          <div class="col-md-4 social">
             <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-facebook"></i></a>
             <a href="#"><i class="fab fa-linkedin"></i></a>
@@ -147,160 +185,179 @@
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">
-        <img src="https://via.placeholder.com/150" class="logo" alt="Logo">
-      </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Listings</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Register</a>
-          </li>
-        </ul>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="#"><img src="{% static 'userside_desktop/logo.png' %}" alt="Logo" height="50" /></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar"><span class="navbar-toggler-icon"></span></button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item{% if request.path == '/' %} active{% endif %}">
+              <a class="nav-link" href="{% url 'pre_home_screen' %}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'about' %}">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+            {% if user.is_authenticated %}
+              <li class="nav-item d-flex align-items-center mx-2">
+                <img src="{% static 'honor_Side_image/defualt_logo.png' %}" class="rounded-circle" width="30" height="30" />
+                <span class="text-white ml-2">Hi, {{ user.username }}</span>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout_view' %}">Log Out</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Log In</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'verify_login_otp' %}">Sign Up</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  <!-- Showcase Section -->
-  <section id="showcase">
-    <div class="container text-center">
-      <h1 class="display-4 font-weight-bold mb-4">Property Searching Made Easy</h1>
-      <p class="lead mb-4">Find your dream property with just a few clicks. Start your search today!</p>
-      
-      <div class="search-form">
-        <form>
-          <div class="form-row">
-            <div class="col-md-4">
-              <input type="text" class="form-control" placeholder="Keyword (Pool, Garage, etc)">
-            </div>
-            <div class="col-md-4">
-              <input type="text" class="form-control" placeholder="City">
-            </div>
-            <div class="col-md-4">
-              <select class="form-control">
-                <option selected>State (All)</option>
-                <option>CA</option>
-                <option>NY</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row mt-3">
-            <div class="col-md-6">
-              <select class="form-control">
-                <option selected>Bedrooms (All)</option>
-                <option>1</option>
-                <option>2</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <select class="form-control">
-                <option selected>Max Price (Any)</option>
-                <option>$100,000</option>
-                <option>$500,000</option>
-              </select>
-            </div>
-          </div>
-          <button class="btn btn-primary mt-4">Search Listings</button>
-        </form>
-      </div>
-    </div>
-  </section>
+    <!-- Showcase -->
+    <section id="showcase">
+      <div class="container">
+        <h1 class="display-4">Find Your Dream Property</h1>
+        <p class="lead">Search homes, apartments, and more — instantly.</p>
 
-  <!-- Listings Section -->
-  <section id="listings" class="py-5">
-    <div class="container">
-      <h3 class="text-center mb-5 font-weight-bold">Latest Listings</h3>
-      <div class="row">
-        <!-- Sample Listing -->
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="card">
-            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1170" class="d-block w-100" alt="Listing Image">
-            <div class="card-body">
-              <div class="listing-heading text-center mb-3">
-                <h4 class="text-primary">Modern Family Home</h4>
-                <p class="text-muted"><i class="fas fa-map-marker-alt"></i> Los Angeles, CA 90001</p>
+        <div class="search-form mx-auto mt-4">
+          <form>
+            <div class="form-row">
+              <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Keyword (e.g., Pool, Garage)" />
               </div>
-              <div class="row text-secondary">
-                <div class="col-6"><i class="fas fa-th-large"></i> Sqft: 2200</div>
-                <div class="col-6"><i class="fas fa-car"></i> Garage: 2</div>
+              <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="City" />
               </div>
-              <div class="row text-secondary">
-                <div class="col-6"><i class="fas fa-bed"></i> Bedrooms: 4</div>
-                <div class="col-6"><i class="fas fa-bath"></i> Bathrooms: 3</div>
+              <div class="col-md-4">
+                <select class="form-control">
+                  <option selected>State (All)</option>
+                  <option>CA</option>
+                  <option>NY</option>
+                </select>
               </div>
-              <hr />
-              <p><i class="fas fa-clock"></i> Listed 3 days ago</p>
-              <a href="#" class="btn btn-primary btn-block">More Info</a>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <select class="form-control">
+                  <option selected>Bedrooms (All)</option>
+                  <option>1</option>
+                  <option>2</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <select class="form-control">
+                  <option selected>Max Price (Any)</option>
+                  <option>$100,000</option>
+                  <option>$500,000</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Search Listings</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Listings -->
+    <section class="py-5">
+      <div class="container">
+        <div class="row">
+          {% for listing in listings %}
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="card">
+                <img src="http://127.0.0.1:8000/main_page{{ listing.photo_main.url }}" class="card-img-top" alt="{{ listing.title }}" />
+                <div class="card-body">
+                  <div class="listing-heading text-center">
+                    <h4 class="text-primary">{{ listing.title }}</h4>
+                    <p class="text-muted">
+                      <i class="fas fa-map-marker-alt"></i> {{ listing.city }}, {{ listing.state }} {{ listing.zipcode }}
+                    </p>
+                  </div>
+                  <div class="row text-secondary mb-2">
+                    <div class="col-6">
+                      <i class="fas fa-th-large"></i> Sqft: {{ listing.sqft }}
+                    </div>
+                    <div class="col-6">
+                      <i class="fas fa-car"></i> Garage: {{ listing.garage }}
+                    </div>
+                  </div>
+                  <div class="row text-secondary mb-2">
+                    <div class="col-6">
+                      <i class="fas fa-bed"></i> Bedrooms: {{ listing.bedrooms }}
+                    </div>
+                    <div class="col-6">
+                      <i class="fas fa-bath"></i> Bathrooms: {{ listing.bathrooms }}
+                    </div>
+                  </div>
+                  <p>
+                    <i class="fas fa-clock"></i> Listed {{ listing.list_date|timesince }} ago
+                  </p>
+                  <a href="{% url 'listing_detail' listing.id %}" class="btn btn-primary btn-block">More Info</a>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <div class="col-12 text-center">
+              <p>No listings found.</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="py-5 bg-light">
+      <div class="container">
+        <div class="row text-center">
+          <div class="col-md-4 mb-4">
+            <div class="service-box">
+              <i class="fas fa-comment"></i>
+              <h4>Consulting Services</h4>
+              <p>Expert advice for all your real estate queries and investments.</p>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="service-box">
+              <i class="fas fa-home"></i>
+              <h4>Property Management</h4>
+              <p>Reliable services to maintain and manage your property assets.</p>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="service-box">
+              <i class="fas fa-suitcase"></i>
+              <h4>Renting & Selling</h4>
+              <p>We help you rent or sell your property with maximum exposure.</p>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Services Section -->
-  <section id="services" class="py-5 bg-light">
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-md-4 mb-4">
-          <div class="service-box">
-            <i class="fas fa-comment"></i>
-            <h3>Consulting Services</h3>
-            <p>Expert advice and guidance for your real estate investments.</p>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="service-box">
-            <i class="fas fa-home"></i>
-            <h3>Property Management</h3>
-            <p>Comprehensive property management services for your investment.</p>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="service-box">
-            <i class="fas fa-suitcase"></i>
-            <h3>Renting & Selling</h3>
-            <p>We assist with all aspects of renting or selling properties.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- Footer -->
+    <footer id="main-footer" class="text-center">
+      <p>
+        &copy; <span class="year"></span> Real Estate
+      </p>
+    </footer>
 
-  <!-- Footer -->
-  <footer id="main-footer" class="text-center">
-    <p>&copy; <span class="year"></span> Real Estate</p>
-  </footer>
-
-  <!-- Bootstrap JS and dependencies (CDN) -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Set current year for the footer
-    document.querySelector('.year').textContent = new Date().getFullYear();
-  </script>
-</body>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.querySelector('.year').textContent = new Date().getFullYear()
+    </script>
+  </body>
 </html>

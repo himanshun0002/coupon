@@ -103,7 +103,6 @@ urlpatterns = [
     
     path('realtor_list', views.realtor_list, name='realtor_list'),
     
-    path('realtors_dashboard',views.realtors_admin,name ='realtors_admin'),
     path('create/', views.realtor_create, name='realtor_create'),
     path('edit/<int:pk>/', views.realtor_edit, name='realtor_edit'),
     path('delete/<int:pk>/', views.realtor_delete, name='realtor_delete'),
@@ -116,7 +115,14 @@ urlpatterns = [
     path('listings', views.listings, name='listings'),
     path('<int:listing_id>', views.listing, name='listing'),
     path('search', views.search, name='search'),
+    path('realtors_dashboard',views.realtors_admin,name ='realtors_admin'),
     
+    
+    
+    
+    
+    
+    path('retalor_role', views.retalor_role_based_redirect, name='retalor_role_based_redirect'), 
     path('realindex',views.realindex,name ='realindex'),
     path('about',views.about,name ='about'),
     

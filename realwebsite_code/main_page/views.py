@@ -1278,14 +1278,20 @@ def shop_role_based_redirect(request):
 
 
 
-
-from django.shortcuts import render
-
-# Create your views here.
-
+from .models import Listing, Realtor
 
 def realtors_admin(request):
-    return render(request, "main_page/realtors_admin.html")
+    total_listings = Listing.objects.count()
+    total_realtors = Realtor.objects.count()
+    recent_listings = Listing.objects.order_by('-list_date')[:5]
+
+    context = {
+        'total_listings': total_listings,
+        'total_realtors': total_realtors,
+        'recent_listings': recent_listings,
+    }
+
+    return render(request, "main_page/realtors_admin.html", context)
 
 
 
@@ -1547,6 +1553,23 @@ def search(request):
   return render(request, 'main_page/search.html', context)
 
 
+
+
+
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def retalor_role_based_redirect(request):
+    user = request.user
+
+    if user.role == "manager":
+        return redirect('realtors_admin')
+    elif user.role == "user":
+        return redirect('realindex')
+    else:
+        # You can customize for admin or unknown roles
+        return redirect('realindex')  # Or raise an error / show message
 
 
 
