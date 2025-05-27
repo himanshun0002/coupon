@@ -173,7 +173,16 @@
         background-color: #00796B;
         box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.1);
       }
+      .add-buttons .cook_orders {
+        background-color:rgb(112, 183, 231);
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.1);
+      }
 
+
+      .add-buttons .delivery_orders {
+        background-color:rgb(134, 219, 119);
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.1);
+      }
       .add-buttons .add-food-item {
         background-color: #1976D2;
         box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.1);
@@ -300,6 +309,12 @@
             </a>
             <a href="{% url 'add_food_item' %}" class="add-food-item">
               <i class="fas fa-utensils" style="margin-right: 8px;"></i> Add Food Item
+            </a>
+            <a href="{% url 'cook_orders' %}" class="cook_orders">
+              <i class="fas fa-plus" style="margin-right: 8px;"></i> Order Status 
+            </a>
+            <a href="{% url 'delivery_orders' %}" class="delivery_orders">
+              <i class="fas fa-utensils" style="margin-right: 8px;"></i>Delievery Status
             </a>
           </div>
 

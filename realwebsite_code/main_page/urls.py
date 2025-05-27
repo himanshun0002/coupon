@@ -6,6 +6,9 @@ from . import views
 
 
 urlpatterns = [
+    
+    path("run-voice-assistant/", views.run_voice_assistant, name="run_voice_assistant"),
+
     path("", pre_home_screen, name="pre_home_screen"),
     path("create_coupon/", create_coupon, name="create_coupon"),
     path("coupon_list/", coupon_list, name="coupon_list"),
@@ -44,18 +47,27 @@ urlpatterns = [
     path("checkout_page/", views.checkout_page, name="checkout_page"),
     path("orders/<int:order_id>/", views.order_detail, name="order_detail"),
     path("order_history/", views.order_history, name="order_history"),
-    path("cook/orders/", views.cook_orders, name="cook_orders"),
     path(
         "cook/orders/mark_cooked/<int:order_id>/",
         views.mark_order_cooked,
         name="mark_order_cooked",
     ),
+    
+    
+    
+    path("cook/orders/", views.cook_orders, name="cook_orders"),
+    path("delivery/orders/", views.delivery_orders, name="delivery_orders"),
+    
+    
+    
+    
+    
+    
     path(
         "order/<int:order_id>/mark-delivered/",
         views.mark_delivered,
         name="mark_delivered",
     ),
-    path("delivery/orders/", views.delivery_orders, name="delivery_orders"),
     path(
         "delivery/orders/ready_for_pickup/<int:order_id>/",
         views.mark_ready_for_pickup,

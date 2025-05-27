@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.crypto import get_random_string
-from .models import Coupon ,Realtor
+from .models import Coupon, Realtor
 from django.utils import timezone
 
 
@@ -586,16 +586,15 @@ from .models import FoodCategory, FoodItem, Order, OrderItem
 
 @login_required
 def vendor_dashboard(request):
-    # Get the logged-in user (the vendor)
     user = request.user
 
     # Get all categories with their associated food items
     categories = FoodCategory.objects.prefetch_related("food_items").all()
 
-    # Calculate the total sales amount, total sales quantity, and the number of orders
-    order_items = OrderItem.objects.filter(order__user=user)
+    # Get all order items that include this vendor's food
+    order_items = OrderItem.objects.filter(food_item__vendor=user)
 
-    # Total sales amount (sum of price_at_purchase * quantity for each order item)
+    # Total sales amount (sum of price_at_purchase * quantity)
     sales_amount = (
         order_items.aggregate(total_sales=Sum(F("price_at_purchase") * F("quantity")))[
             "total_sales"
@@ -603,19 +602,20 @@ def vendor_dashboard(request):
         or 0
     )
 
-    # Total sales quantity (sum of quantity for all order items)
+    # Total quantity sold
     sales_quantity = (
         order_items.aggregate(total_quantity=Sum("quantity"))["total_quantity"] or 0
     )
 
-    # Number of orders placed by the vendor (user)
-    orders_count = Order.objects.filter(user=user).count()
+    # Number of unique orders that included this vendor's food items
+    orders_count = (
+        Order.objects.filter(order_items__food_item__vendor=user).distinct().count()
+    )
 
-    # Calculate overall rating for the food items the vendor has
+    # Vendor's food item ratings average
     food_items = FoodItem.objects.filter(vendor=user)
-    average_rating = food_items.aggregate(Avg("rating"))["rating__avg"] or 0
+    average_rating = food_items.aggregate(avg_rating=Avg("rating"))["avg_rating"] or 0
 
-    # Prepare context to pass to template
     context = {
         "categories": categories,
         "sales_amount": sales_amount,
@@ -624,10 +624,11 @@ def vendor_dashboard(request):
         "orders_count": orders_count,
     }
 
-    # Render the vendor dashboard template with context
     return render(request, "main_page/vendor_dashboard1.html", context)
 
+
 from .models import ManagerProfile
+
 
 @login_required
 def vendor_dashboard_by_shop(request, shop_id):
@@ -638,10 +639,15 @@ def vendor_dashboard_by_shop(request, shop_id):
     # Assuming FoodItems are linked to shop: food_items = FoodItem.objects.filter(shop=shop)
     # Add your logic here based on shop
 
-    return render(request, "main_page/vendor_dashboard1.html", {
-        "shop": shop,
-        # Include other context data if needed
-    })
+    return render(
+        request,
+        "main_page/vendor_dashboard1.html",
+        {
+            "shop": shop,
+            # Include other context data if needed
+        },
+    )
+
 
 # from django.shortcuts import render,get_object_or_404
 # from .models import FoodCategory
@@ -674,7 +680,6 @@ def role_based_redirect(request):
         return render(
             request, "main_page/access_denied.html", {"message": "Role not allowed."}
         )
-
 
 
 from collections import defaultdict
@@ -1227,81 +1232,30 @@ def shop_role_based_redirect(request):
         return redirect("user_shop_list")  # Other roles go to general shop list
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ####################################################
-
-
-
-
-
 
 
 from .models import Listing, Realtor
 
+
 def realtors_admin(request):
     total_listings = Listing.objects.count()
     total_realtors = Realtor.objects.count()
-    recent_listings = Listing.objects.order_by('-list_date')[:5]
+    recent_listings = Listing.objects.order_by("-list_date")[:5]
 
     context = {
-        'total_listings': total_listings,
-        'total_realtors': total_realtors,
-        'recent_listings': recent_listings,
+        "total_listings": total_listings,
+        "total_realtors": total_realtors,
+        "recent_listings": recent_listings,
     }
 
     return render(request, "main_page/realtors_admin.html", context)
-
 
 
 # View for listing all realtors
 def realtor_list(request):
     realtors = Realtor.objects.all()
     return render(request, "main_page/realtor_list.html", {"realtors": realtors})
-
-
-
 
 
 # View for creating a new realtor
@@ -1336,7 +1290,10 @@ def realtor_create(request):
         return redirect("realtor_list")
     return render(request, "main_page/realtor_form.html")
 
+
 from datetime import datetime
+
+
 # View for editing an existing realtor
 def realtor_edit(request, pk):
     realtor = get_object_or_404(Realtor, pk=pk)
@@ -1434,12 +1391,14 @@ def listing_delete(request, pk):
     )
 
 
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest
+
 # from listings.models import Listing  # Ensure this import is correct based on your app structure
 from .models import Listing
+
+
 @login_required
 def listing_create(request):
     if request.method == "POST":
@@ -1478,130 +1437,132 @@ def listing_create(request):
     return render(request, "main_page/listing_create.html")
 
 
-
-
-
 from django.shortcuts import get_object_or_404, render
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from .choices import price_choices, bedroom_choices, state_choices
 
 from .models import Listing
 
+
 def listings(request):
-  listings = Listing.objects.order_by('-list_date').filter(is_published=True)
+    listings = Listing.objects.order_by("-list_date").filter(is_published=True)
 
-  paginator = Paginator(listings, 6)
-  page = request.GET.get('page')
-  paged_listings = paginator.get_page(page)
+    paginator = Paginator(listings, 6)
+    page = request.GET.get("page")
+    paged_listings = paginator.get_page(page)
 
-  context = {
-    'listings': paged_listings
-  }
+    context = {"listings": paged_listings}
 
-  return render(request, 'main_page/listings.html', context)
+    return render(request, "main_page/listings.html", context)
+
 
 def listing(request, listing_id):
-  listing = get_object_or_404(Listing, pk=listing_id)
+    listing = get_object_or_404(Listing, pk=listing_id)
 
-  context = {
-    'listing': listing
-  }
+    context = {"listing": listing}
 
-  return render(request, 'main_page/listing.html', context)
+    return render(request, "main_page/listing.html", context)
+
 
 def search(request):
-  queryset_list = Listing.objects.order_by('-list_date')
+    queryset_list = Listing.objects.order_by("-list_date")
 
-  # Keywords
-  if 'keywords' in request.GET:
-    keywords = request.GET['keywords']
-    if keywords:
-      queryset_list = queryset_list.filter(description__icontains=keywords)
+    # Keywords
+    if "keywords" in request.GET:
+        keywords = request.GET["keywords"]
+        if keywords:
+            queryset_list = queryset_list.filter(description__icontains=keywords)
 
-  # City
-  if 'city' in request.GET:
-    city = request.GET['city']
-    if city:
-      queryset_list = queryset_list.filter(city__iexact=city)
+    # City
+    if "city" in request.GET:
+        city = request.GET["city"]
+        if city:
+            queryset_list = queryset_list.filter(city__iexact=city)
 
-  # State
-  if 'state' in request.GET:
-    state = request.GET['state']
-    if state:
-      queryset_list = queryset_list.filter(state__iexact=state)
+    # State
+    if "state" in request.GET:
+        state = request.GET["state"]
+        if state:
+            queryset_list = queryset_list.filter(state__iexact=state)
 
-  # Bedrooms
-  if 'bedrooms' in request.GET:
-    bedrooms = request.GET['bedrooms']
-    if bedrooms:
-      queryset_list = queryset_list.filter(bedrooms__lte=bedrooms)
+    # Bedrooms
+    if "bedrooms" in request.GET:
+        bedrooms = request.GET["bedrooms"]
+        if bedrooms:
+            queryset_list = queryset_list.filter(bedrooms__lte=bedrooms)
 
-  # Price
-  if 'price' in request.GET:
-    price = request.GET['price']
-    if price:
-      queryset_list = queryset_list.filter(price__lte=price)
+    # Price
+    if "price" in request.GET:
+        price = request.GET["price"]
+        if price:
+            queryset_list = queryset_list.filter(price__lte=price)
 
-  context = {
-    'state_choices': state_choices,
-    'bedroom_choices': bedroom_choices,
-    'price_choices': price_choices,
-    'listings': queryset_list,
-    'values': request.GET
-  }
+    context = {
+        "state_choices": state_choices,
+        "bedroom_choices": bedroom_choices,
+        "price_choices": price_choices,
+        "listings": queryset_list,
+        "values": request.GET,
+    }
 
-  return render(request, 'main_page/search.html', context)
-
-
-
+    return render(request, "main_page/search.html", context)
 
 
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+
 
 @login_required
 def retalor_role_based_redirect(request):
     user = request.user
 
     if user.role == "manager":
-        return redirect('realtors_admin')
+        return redirect("realtors_admin")
     elif user.role == "user":
-        return redirect('realindex')
+        return redirect("realindex")
     else:
         # You can customize for admin or unknown roles
-        return redirect('realindex')  # Or raise an error / show message
-
-
-
+        return redirect("realindex")  # Or raise an error / show message
 
 
 from django.shortcuts import render
 from django.http import HttpResponse
 
+
 def realindex(request):
-    listings = Listing.objects.order_by('-list_date').filter(is_published=True)[:3]
+    listings = Listing.objects.order_by("-list_date").filter(is_published=True)[:3]
 
     context = {
-        'listings': listings,
-        'state_choices': state_choices,
-        'bedroom_choices': bedroom_choices,
-        'price_choices': price_choices
+        "listings": listings,
+        "state_choices": state_choices,
+        "bedroom_choices": bedroom_choices,
+        "price_choices": price_choices,
     }
 
-    return render(request, 'main_page/index.html', context)
+    return render(request, "main_page/index.html", context)
 
 
 def about(request):
     # Get all realtors
-    realtors = Realtor.objects.order_by('-hire_date')
+    realtors = Realtor.objects.order_by("-hire_date")
 
     # Get MVP
     mvp_realtors = Realtor.objects.all().filter(is_mvp=True)
 
-    context = {
-        'realtors': realtors,
-        'mvp_realtors': mvp_realtors
-    }
+    context = {"realtors": realtors, "mvp_realtors": mvp_realtors}
 
-    return render(request, 'main_page/about.html', context)
+    return render(request, "main_page/about.html", context)
 
+
+import subprocess
+from django.http import JsonResponse
+
+
+def run_voice_assistant(request):
+    try:
+        subprocess.Popen(["python", "main_page/voice_assistant.py"])
+        return JsonResponse(
+            {"status": "success", "message": "Voice assistant started."}
+        )
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)})

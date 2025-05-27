@@ -54,7 +54,7 @@
             <input type="file" class="form-control" id="image" name="image">
             {% if food_item.image %}
                 <p>Current Image:</p>
-                <img src="{{ food_item.image.url }}" alt="Food Image" class="img-thumbnail" width="150">
+                <img src="http://127.0.0.1:8000/main_page{{ food_item.image.url }}" alt="Food Image" class="img-thumbnail" width="150">
             {% endif %}
         </div>
 
