@@ -1,0 +1,6 @@
+Django==4.2.7
+whisper==1.1.10
+pydub==0.25.1
+openai-whisper==20231117
+Pillow==10.0.1
+python-decouple==3.8
